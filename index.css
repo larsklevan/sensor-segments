@@ -1,0 +1,40 @@
+html, body {
+  height: 100%;
+}
+body {
+  font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.panel-primary {
+  border-color: #20a79f;
+}
+.panel-primary > .panel-heading {
+  background-image: none;
+  background-color: #20a79f;
+  border-color: #20a79f;
+}
+.btn-primary {
+  background-image: none;
+  background-color: #20a79f;
+  border-color: #20a79f;
+}
+.btn-primary:hover {
+  border-color: #20a79f;
+  background-color: #20a79f;
+}
+.navbar-default {
+  background-image: none;
+  background-color: #f5f5f5;
+  border-radius: 0;
+  box-shadow: none;
+}
+.navbar-default .navbar-brand {
+  color: #20a79f;
+}
+.login-container {
+  height: 100%;
+  background-image: url(./HeroImage.jpg);
+  background-size: cover;
+}
+.login-column {
+  margin-top: 50px;
+}

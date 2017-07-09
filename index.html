@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sensor Segment Builder</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" id="shapely-fonts-css" href="https://fonts.googleapis.com/css?family=Raleway%3A100%2C300%2C400%2C500%2C600%2C700%7COpen+Sans%3A400%2C500%2C600&amp;ver=4.7.5" type="text/css" media="all">
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Wildflower Schools: Sensor Segment Builder</a>
+        </div>
+      </div>
+    </nav>
+    <div class="container login-container">
+      <div class="row">
+        <div class="col-xs-12 col-md-6 col-md-offset-3 login-column">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              S3 Bucket Information
+            </div>
+            <div class="panel-body">
+              <form class="login-form">
+                <div class="form-group">
+                  <label for="bucketName">Bucket Name</label>
+                  <input type="text" name="bucketName" id="bucketName" class="form-control" placeholder="s3-bucket-name" required>
+                </div>
+                <div class="form-group">
+                  <label for="accessKey">Access Key ID</label>
+                  <input type="text" name="accessKey" id="accessKey" class="form-control" placeholder="AFASA7O8978A8DFJFJF6" required>
+                </div>
+                <div class="form-group">
+                  <label for="secretKey">Secret Access Key</label>
+                  <input type="text" name="secretKey" id="secretKey" class="form-control" placeholder="ba8e32688cd99e17a6fac3a004bb04aa" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container sensor-container">
+      <h1>Here</h1>
+    </div>
+    <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="./index.js"></script>
+  </body>
+</html>
