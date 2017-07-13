@@ -54,6 +54,7 @@
   $(document).on('change', '.date-select', function(e) {
     var datePrefix = $(this).val();
     loadPhotos(datePrefix, function(err, photos) {
+      $('.photo-viewer').removeClass('hidden').empty();
       if (err) {
         handleErr(err);
       } else {
@@ -62,7 +63,7 @@
             Key: photo,
             Expires: 6000
           });
-          $('.photo-viewer').removeClass('hidden').html($('<img>').attr('src', url));
+          $('.photo-viewer').append($('<img>').attr('src', url));
         });
       }
     });

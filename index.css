@@ -38,3 +38,6 @@ body {
 .login-column {
   margin-top: 50px;
 }
+.photo-viewer img {
+  max-width: 100%;
+}
