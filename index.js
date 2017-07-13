@@ -54,16 +54,18 @@
   $(document).on('change', '.date-select', function(e) {
     var datePrefix = $(this).val();
     loadPhotos(datePrefix, function(err, photos) {
-      $('.photo-viewer').removeClass('hidden').empty();
+      var $photoViewer = $('.photo-viewer').removeClass('hidden').empty();
       if (err) {
         handleErr(err);
       } else {
         photos.forEach(function(photo) {
           var url = window.s3.getSignedUrl('getObject', {
-            Key: photo,
+            Key: photo.Key,
             Expires: 6000
           });
-          $('.photo-viewer').append($('<img>').attr('src', url));
+          var filename = photo.Key.replace(/.*\//, '');
+          $('<h2>').text(filename).appendTo($photoViewer);
+          $('<img>').attr('src', url).appendTo($photoViewer);
         });
       }
     });
@@ -149,7 +151,7 @@
         var results = [];
         data.Contents.forEach(function(object) {
           if (!object.Key.endsWith('/')) {
-            results.push(object.Key);
+            results.push(object);
           }
         });
         callback(null, results);
