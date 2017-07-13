@@ -8,6 +8,7 @@
     var form = this;
     var s3Credentials = {
       bucketName: form.bucketName.value,
+      region: form.region.value,
       accessKey: form.accessKey.value,
       secretKey: form.secretKey.value
     };
@@ -28,6 +29,7 @@
       s3Credentials = JSON.parse(s3Credentials);
       var form = $('.login-form')[0];
       form.bucketName.value = s3Credentials.bucketName;
+      form.region.value = s3Credentials.region;
       form.accessKey.value = s3Credentials.accessKey;
       form.secretKey.value = s3Credentials.secretKey;
     }
@@ -96,7 +98,7 @@
   function login(s3Credentials, callback) {
     AWS.config.accessKeyId = s3Credentials.accessKey;
     AWS.config.secretAccessKey = s3Credentials.secretKey;
-    AWS.config.region = 'us-west-2';
+    AWS.config.region = s3Credentials.region;
     var s3 = new AWS.S3({
       apiVersion: '2006-03-01',
       params: {
