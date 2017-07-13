@@ -17,7 +17,8 @@ body {
   background-color: #20a79f;
   border-color: #20a79f;
 }
-.btn-primary:hover {
+.btn-primary:hover,.btn-primary:focus,.btn-primary:active,.btn-primary:active:focus {
+  background-image: none;
   border-color: #20a79f;
   background-color: #20a79f;
 }
