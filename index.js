@@ -12,13 +12,13 @@
       accessKey: form.accessKey.value,
       secretKey: form.secretKey.value
     };
-    localStorage.setItem('s3Credentials', JSON.stringify(s3Credentials));
     load(s3Credentials, function(err) {
       if (err) {
         handleError(err);
       } else {
-        $('.login-container').hide();
-        $('.sensor-container').show();
+        localStorage.setItem('s3Credentials', JSON.stringify(s3Credentials));
+        $('.login-container').addClass('hidden');
+        $('.sensor-container').removeClass('hidden');
       }
     });
   });
@@ -37,6 +37,7 @@
 
   $(document).on('change', '.sensor-select', function(e) {
     var sensor = $(this).val();
+    $('.photo-viewer').addClass('hidden');
     var $dateSelect = $('.date-select').empty();
     $dateSelect.parent().toggleClass('hidden', sensor.length === 0);
     if (sensor.length) {
@@ -54,9 +55,9 @@
   });
 
   $(document).on('change', '.date-select', function(e) {
+    var $photoViewer = $('.photo-viewer').removeClass('hidden').empty();
     var datePrefix = $(this).val();
     loadPhotos(datePrefix, function(err, photos) {
-      var $photoViewer = $('.photo-viewer').removeClass('hidden').empty();
       if (err) {
         handleErr(err);
       } else {
