@@ -56,22 +56,58 @@
 
   $(document).on('change', '.date-select', function(e) {
     var $photoViewer = $('.photo-viewer').removeClass('hidden').empty();
+    var $carousel = $('<div id="carousel" class="carousel slide"></div>').appendTo($photoViewer);
+    var $carouselInner = $('<div class="carousel-inner"></div>').appendTo($carousel);
+    $('<a class="left carousel-control" href="#carousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="right carousel-control" href="#carousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a>').appendTo($carousel);
     var datePrefix = $(this).val();
     loadPhotos(datePrefix, function(err, photos) {
       if (err) {
         handleErr(err);
       } else {
-        photos.forEach(function(photo) {
+        photos.forEach(function(photo, i) {
+          var $carouselItem = $('<div class="item"></div>').appendTo($carouselInner);
+          if (i === 0) {
+            $carouselItem.addClass('active');
+          }
           var url = window.s3.getSignedUrl('getObject', {
             Key: photo.Key,
             Expires: 6000
           });
+          $('<img>').attr('src', url).appendTo($carouselItem);
+
           var filename = photo.Key.replace(/.*\//, '');
-          $('<h2>').text(filename).appendTo($photoViewer);
-          $('<img>').attr('src', url).appendTo($photoViewer);
+          var $carouselCaption = $('<div class="carousel-caption"></div>').appendTo($carouselItem);
+          $('<h3></h3>').text(filename).appendTo($carouselCaption);
+
+          var lastModified = new Date(photo.LastModified);
+          var hour = lastModified.getHours() % 12;
+          if (hour === 0) {
+            hour = 12
+          }
+          var minutes = ("00" + lastModified.getMinutes()).slice(-2);
+          var seconds = ("00" + lastModified.getSeconds()).slice(-2);
+          var ampm = lastModified.getHours() > 11 ? 'PM' : 'AM';
+          var lastModifiedFormatted = hour + ':' + minutes + ':' + seconds + ampm;
+          $('<p></p>').text(lastModifiedFormatted).appendTo($carouselCaption);
         });
       }
     });
+    $carousel.carousel({
+      interval: false,
+      wrap: false
+    });
+  });
+
+  // built-in keyboard option on carousel only works if the carousel has focus
+  $(document).keydown(function(e) {
+    if (e.keyCode === 37) {
+      // Previous
+      $("#carousel").carousel('prev');
+    }
+    if (e.keyCode === 39) {
+      // Next
+      $("#carousel").carousel('next');
+    }
   });
 
   function load(s3Credentials, callback) {
