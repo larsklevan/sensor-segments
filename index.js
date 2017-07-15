@@ -58,7 +58,7 @@
     var $photoViewer = $('.photo-viewer').removeClass('hidden').empty();
     var $carousel = $('<div id="carousel" class="carousel slide"></div>').appendTo($photoViewer);
     var $carouselInner = $('<div class="carousel-inner"></div>').appendTo($carousel);
-    $('<a class="left carousel-control" href="#carousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="right carousel-control" href="#carousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a>').appendTo($carousel);
+    $('<a class="left carousel-control" data-toggle="tooltip" data-placement="left" title="Keyboard Shortcut: Left Arrow" href="#carousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="right carousel-control" data-toggle="tooltip" data-placement="right" title="Keyboard Shortcut: Right Arrow" href="#carousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a>').appendTo($carousel);
     var datePrefix = $(this).val();
     loadPhotos(datePrefix, function(err, photos) {
       if (err) {
@@ -95,7 +95,7 @@
     $carousel.carousel({
       interval: false,
       wrap: false
-    });
+    }).find('[data-toggle="tooltip"]').tooltip();
   });
 
   // built-in keyboard option on carousel only works if the carousel has focus
