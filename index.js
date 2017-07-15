@@ -18,7 +18,7 @@
       } else {
         localStorage.setItem('s3Credentials', JSON.stringify(s3Credentials));
         $('.login-container').addClass('hidden');
-        $('.sensor-container').removeClass('hidden');
+        $('.camera-container').removeClass('hidden');
       }
     });
   });
@@ -35,19 +35,19 @@
     }
   });
 
-  $(document).on('change', '.sensor-select', function(e) {
-    var sensor = $(this).val();
+  $(document).on('change', '.camera-select', function(e) {
+    var camera = $(this).val();
     $('.photo-viewer').addClass('hidden');
     var $dateSelect = $('.date-select').empty();
-    $dateSelect.parent().toggleClass('hidden', sensor.length === 0);
-    if (sensor.length) {
-      loadDates(sensor, function(err, dates) {
+    $dateSelect.parent().toggleClass('hidden', camera.length === 0);
+    if (camera.length) {
+      loadDates(camera, function(err, dates) {
         if (err) {
           handleError(err);
         } else {
           $dateSelect.append($('<option>'));
           dates.forEach(function(date) {
-            $dateSelect.append($('<option>').val(sensor + '/' + date + '/').text(date));
+            $dateSelect.append($('<option>').val(camera + '/' + date + '/').text(date));
           });
         }
       })
@@ -116,14 +116,14 @@
         callback(err);
       } else {
         window.s3 = s3;
-        loadSensors(function(err, sensors) {
+        loadCameras(function(err, cameras) {
           if (err) {
             callback(err);
           } else {
-            var $sensorSelect = $('.sensor-select').empty();
-            $sensorSelect.append('<option>');
-            sensors.forEach(function(sensor) {
-              $sensorSelect.append($('<option>').val(sensor).text(sensor));
+            var $cameraSelect = $('.camera-select').empty();
+            $cameraSelect.append('<option>');
+            cameras.forEach(function(camera) {
+              $cameraSelect.append($('<option>').val(camera).text(camera));
             });
             callback(null);
           }
@@ -147,23 +147,23 @@
     });
   }
 
-  function loadSensors(callback) {
-    var sensors = [];
+  function loadCameras(callback) {
+    var cameras = [];
     var params = {
       Delimiter: '/'
     };
     window.s3.listObjects(params, function(err, data) {
       data.CommonPrefixes.forEach(function(commonPrefix) {
-        sensors.push(commonPrefix.Prefix.toString().replace(/\//, ''));
+        cameras.push(commonPrefix.Prefix.toString().replace(/\//, ''));
       });
-      callback(null, sensors);
+      callback(null, cameras);
     });
   }
 
-  function loadDates(sensor, callback) {
+  function loadDates(camera, callback) {
     var params = {
       Delimiter: '/',
-      Prefix: sensor + '/'
+      Prefix: camera + '/'
     };
     window.s3.listObjects(params, function(err, data) {
       if (err) {
