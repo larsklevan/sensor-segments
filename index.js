@@ -38,16 +38,15 @@
   $(document).on('change', '.camera-select', function(e) {
     var camera = $(this).val();
     $('.photo-viewer').addClass('hidden');
-    var $dateSelect = $('.date-select').empty();
-    $dateSelect.parent().toggleClass('hidden', camera.length === 0);
+    var $dateSelect = $('.date-select').addClass('hidden').empty();
     if (camera.length) {
       loadDates(camera, function(err, dates) {
         if (err) {
           handleError(err);
         } else {
-          $dateSelect.append($('<option>'));
+          $dateSelect.removeClass('hidden').append($('<option></option>').text('Select a date'));
           dates.forEach(function(date) {
-            $dateSelect.append($('<option>').val(camera + '/' + date + '/').text(date));
+            $dateSelect.append($('<option></option>').val(camera + '/' + date + '/').text(date));
           });
         }
       })
@@ -58,7 +57,7 @@
     var $photoViewer = $('.photo-viewer').removeClass('hidden').empty();
     var $carousel = $('<div id="carousel" class="carousel slide"></div>').appendTo($photoViewer);
     var $carouselInner = $('<div class="carousel-inner"></div>').appendTo($carousel);
-    $('<a class="left carousel-control" data-toggle="tooltip" data-placement="left" title="Keyboard Shortcut: Left Arrow" href="#carousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="right carousel-control" data-toggle="tooltip" data-placement="right" title="Keyboard Shortcut: Right Arrow" href="#carousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a>').appendTo($carousel);
+    $('<a class="left carousel-control" data-toggle="tooltip" data-placement="right" title="Keyboard Shortcut: Left Arrow" href="#carousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="right carousel-control" data-toggle="tooltip" data-placement="left" title="Keyboard Shortcut: Right Arrow" href="#carousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a>').appendTo($carousel);
     var datePrefix = $(this).val();
     loadPhotos(datePrefix, function(err, photos) {
       if (err) {
@@ -120,10 +119,10 @@
           if (err) {
             callback(err);
           } else {
-            var $cameraSelect = $('.camera-select').empty();
-            $cameraSelect.append('<option>');
+            var $cameraSelect = $('.camera-select').removeClass('hidden').empty();
+            $cameraSelect.append($('<option></option>').text('Select a camera'));
             cameras.forEach(function(camera) {
-              $cameraSelect.append($('<option>').val(camera).text(camera));
+              $cameraSelect.append($('<option></option>').val(camera).text('Camera ' + camera));
             });
             callback(null);
           }

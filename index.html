@@ -12,6 +12,14 @@
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="/">Wildflower Schools: Camera Segment Builder</a>
+          <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <select class="form-control camera-select hidden" name="camera-select"></select>
+            </div>
+            <div class="form-group">
+              <select class="form-control date-select hidden" name="date-select"></select>
+            </div>
+          </form>
         </div>
       </div>
     </nav>
@@ -49,17 +57,7 @@
     </div>
     <div class="container-fluid camera-container hidden">
       <div class="row">
-        <div class="col-xs-2">
-          <div class="form-group">
-            <label for="camera-select">Select a Camera</label>
-            <select class="form-control camera-select" name="camera-select"></select>
-          </div>
-          <div class="form-group hidden">
-            <label for="date-select">Select a Date</label>
-            <select class="form-control date-select" name="date-select"></select>
-          </div>
-        </div>
-        <div class="col-xs-10">
+        <div class="col-xs-12">
           <div class="photo-viewer hidden">
           </div>
         </div>
