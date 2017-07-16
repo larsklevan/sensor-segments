@@ -123,7 +123,11 @@
     var secondSensor = $secondInput.val();
     var startTime = $('.carousel .item.active').data('timestamp');
 
-    var $newTr = $('<tr></tr>').data('startTime', startTime);
+    var $newTr = $('<tr></tr>').data({
+      firstSensor: firstSensor,
+      secondSensor: secondSensor,
+      startTime: startTime
+    });
     $('<td></td>').text(firstSensor).appendTo($newTr);
     $('<td></td>').text(secondSensor).appendTo($newTr);
     $('<td></td>').text(timeOfDay(startTime)).appendTo($newTr);
@@ -132,6 +136,38 @@
 
     $firstInput.val('');
     $secondInput.val('');
+  });
+
+  $(document).on('click', '.end-segment', function(e) {
+    e.preventDefault();
+    var endTime = $('.carousel .item.active').data('timestamp');
+    var $tr = $(this).closest('tr').data('endTime', endTime);
+    $tr.find('td:last-child').text(timeOfDay(endTime));
+  });
+
+  $(document).on('click', '.export-segments', function(e) {
+    var $segments = $('.sensors-list tr').not(':first-child');
+    var csv = ["1st Sensor,2nd Sensor,Start Time,End Time"];
+    $segments.each(function(i, tr) {
+      var $tr = $(tr);
+      var startTime = $tr.data('startTime');
+      var endTime = $tr.data('endTime') || $('.carousel .item.active').data('timestamp');
+      csv.push([
+        $tr.data('firstSensor'),
+        $tr.data('secondSensor'),
+        startTime.toISOString(),
+        endTime.toISOString()
+      ].join(','))
+    });
+    $('#export-modal textarea').val(csv.join("\n"));
+  });
+
+  $(document).on('shown.bs.modal', '#export-modal', function() {
+    $('#export-modal textarea').select();
+  });
+
+  $(document).on('focus', '#export-modal textarea', function(e) {
+    $(this).select()
   });
 
   function load(s3Credentials, callback) {

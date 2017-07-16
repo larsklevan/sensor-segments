@@ -63,7 +63,9 @@
         </div>
         <div class="col-xs-12 col-sm-6 col-md-4">
           <h2>Proximity Segments <i class="glyphicon glyphicon-question-sign" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="What Are Segments?" data-content="A segment occurs when 2 sensors are within 3 feet of each other. Start the segment in the first image in which they are within 3 feet and stop it in the first image in which they are > 3 feet apart."></i></h2>
-          <p class="text-muted"><em></em></p>
+          <p>
+            <button class="btn btn-block btn-default export-segments" data-toggle="modal" data-target="#export-modal">Export</button>
+          </p>
           <table class="sensors-list table table-striped">
             <thead>
               <th>1st Sensor</th>
@@ -74,10 +76,10 @@
             <tbody>
               <tr>
                 <td>
-                  <input type="text" name="sensor1" id="sensor1" class="form-control" placeholder="Sensor 1" required>
+                  <input type="text" name="sensor1" id="sensor1" class="form-control" placeholder="1st Sensor#" required>
                 </td>
                 <td>
-                  <input type="text" name="sensor2" id="sensor2" class="form-control"  placeholder="Sensor 2"  required>
+                  <input type="text" name="sensor2" id="sensor2" class="form-control"  placeholder="2nd Sensor #"  required>
                 </td>
                 <td>
                   <button class="btn btn-sm btn-primary start-segment">Start</button>
@@ -85,20 +87,27 @@
                 <td>
                 </td>
               </tr>
-              <tr>
-                <td>1</td>
-                <td>6</td>
-                <td>3:45PM</td>
-                <td><button class="btn btn-sm btn-primary">End</button></td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>7</td>
-                <td>3:42PM</td>
-                <td>3:48PM</td>
-              </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+    <div id="export-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Sensor Segments</h4>
+          </div>
+          <div class="modal-body">
+            <p class="text-muted">Copy and paste from the content below to export data.</p>
+            <div class="form-group">
+              <textarea class="form-control" readonly></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
         </div>
       </div>
     </div>

@@ -49,4 +49,15 @@ body {
 .sensors-list input {
   text-align: center;
   display: inline;
+  min-width: 115px;
+}
+#export-modal .form-control {
+  border-radius: 0;
+  box-shadow: none;
+  height: 200px;
+  resize: none;
+}
+#export-modal .form-control:focus {
+  border-color: #ccc;
+  box-shadow: none;
 }
