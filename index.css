@@ -42,3 +42,11 @@ body {
 .carousel-caption {
   opacity: 0.7;
 }
+.sensors-list th, .sensors-list td {
+  text-align: center;
+  width: 25%;
+}
+.sensors-list input {
+  text-align: center;
+  display: inline;
+}

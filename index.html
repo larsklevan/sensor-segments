@@ -55,11 +55,50 @@
         </div>
       </div>
     </div>
-    <div class="container-fluid camera-container hidden">
+    <div class="photo-container container-fluid hidden">
       <div class="row">
-        <div class="col-xs-12">
-          <div class="photo-viewer hidden">
+        <div class="col-xs-12 col-sm-6 col-md-8">
+          <div class="photo-viewer">
           </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <h2>Proximity Segments <i class="glyphicon glyphicon-question-sign" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="What Are Segments?" data-content="A segment occurs when 2 sensors are within 3 feet of each other. Start the segment in the first image in which they are within 3 feet and stop it in the first image in which they are > 3 feet apart."></i></h2>
+          <p class="text-muted"><em></em></p>
+          <table class="sensors-list table table-striped">
+            <thead>
+              <th>1st Sensor</th>
+              <th>2nd Sensor</th>
+              <th>Start</th>
+              <th>End</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input type="text" name="sensor1" id="sensor1" class="form-control" placeholder="Sensor 1" required>
+                </td>
+                <td>
+                  <input type="text" name="sensor2" id="sensor2" class="form-control"  placeholder="Sensor 2"  required>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-primary start-segment">Start</button>
+                </td>
+                <td>
+                </td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>6</td>
+                <td>3:45PM</td>
+                <td><button class="btn btn-sm btn-primary">End</button></td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>7</td>
+                <td>3:42PM</td>
+                <td>3:48PM</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

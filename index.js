@@ -2,6 +2,20 @@
   function handleError(err) {
     alert(err);
   }
+  function timeOfDay(date) {
+    var hour = date.getHours() % 12;
+    if (hour === 0) {
+      hour = 12
+    }
+    var minutes = ("00" + date.getMinutes()).slice(-2);
+    var seconds = ("00" + date.getSeconds()).slice(-2);
+    var ampm = date.getHours() > 11 ? 'PM' : 'AM';
+    return hour + ':' + minutes + ':' + seconds + ampm;
+  }
+
+  $(function () {
+    $('[data-toggle="popover"]').popover()
+  });
 
   $(document).on('submit', '.login-form', function(e) {
     e.preventDefault();
@@ -18,7 +32,6 @@
       } else {
         localStorage.setItem('s3Credentials', JSON.stringify(s3Credentials));
         $('.login-container').addClass('hidden');
-        $('.camera-container').removeClass('hidden');
       }
     });
   });
@@ -37,7 +50,7 @@
 
   $(document).on('change', '.camera-select', function(e) {
     var camera = $(this).val();
-    $('.photo-viewer').addClass('hidden');
+    $('.photo-container').addClass('hidden');
     var $dateSelect = $('.date-select').addClass('hidden').empty();
     if (camera.length) {
       loadDates(camera, function(err, dates) {
@@ -54,7 +67,7 @@
   });
 
   $(document).on('change', '.date-select', function(e) {
-    var $photoViewer = $('.photo-viewer').removeClass('hidden').empty();
+    var $photoViewer = $('.photo-viewer').empty();
     var $carousel = $('<div id="carousel" class="carousel slide"></div>').appendTo($photoViewer);
     var $carouselInner = $('<div class="carousel-inner"></div>').appendTo($carousel);
     $('<a class="left carousel-control" data-toggle="tooltip" data-placement="right" title="Keyboard Shortcut: Left Arrow" href="#carousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="right carousel-control" data-toggle="tooltip" data-placement="left" title="Keyboard Shortcut: Right Arrow" href="#carousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a>').appendTo($carousel);
@@ -63,8 +76,10 @@
       if (err) {
         handleErr(err);
       } else {
+        $('.photo-container').toggleClass('hidden', photos.length === 0);
         photos.forEach(function(photo, i) {
-          var $carouselItem = $('<div class="item"></div>').appendTo($carouselInner);
+          var timestamp = new Date(photo.LastModified);
+          var $carouselItem = $('<div class="item"></div>').data('timestamp', timestamp).appendTo($carouselInner);
           if (i === 0) {
             $carouselItem.addClass('active');
           }
@@ -77,17 +92,7 @@
           var filename = photo.Key.replace(/.*\//, '');
           var $carouselCaption = $('<div class="carousel-caption"></div>').appendTo($carouselItem);
           $('<h3></h3>').text(filename).appendTo($carouselCaption);
-
-          var lastModified = new Date(photo.LastModified);
-          var hour = lastModified.getHours() % 12;
-          if (hour === 0) {
-            hour = 12
-          }
-          var minutes = ("00" + lastModified.getMinutes()).slice(-2);
-          var seconds = ("00" + lastModified.getSeconds()).slice(-2);
-          var ampm = lastModified.getHours() > 11 ? 'PM' : 'AM';
-          var lastModifiedFormatted = hour + ':' + minutes + ':' + seconds + ampm;
-          $('<p></p>').text(lastModifiedFormatted).appendTo($carouselCaption);
+          $('<p></p>').text(timeOfDay(timestamp)).appendTo($carouselCaption);
         });
       }
     });
@@ -107,6 +112,26 @@
       // Next
       $("#carousel").carousel('next');
     }
+  });
+
+  $(document).on('click', '.start-segment', function(e) {
+    e.preventDefault();
+    var $tr = $(this).closest('tr');
+    var $firstInput = $tr.find('td:first-child input');
+    var $secondInput = $tr.find('td:nth-child(2) input');
+    var firstSensor = $firstInput.val();
+    var secondSensor = $secondInput.val();
+    var startTime = $('.carousel .item.active').data('timestamp');
+
+    var $newTr = $('<tr></tr>').data('startTime', startTime);
+    $('<td></td>').text(firstSensor).appendTo($newTr);
+    $('<td></td>').text(secondSensor).appendTo($newTr);
+    $('<td></td>').text(timeOfDay(startTime)).appendTo($newTr);
+    $('<td><button class="btn btn-sm btn-primary end-segment">End</button></td>').appendTo($newTr);
+    $newTr.insertAfter($tr);
+
+    $firstInput.val('');
+    $secondInput.val('');
   });
 
   function load(s3Credentials, callback) {
