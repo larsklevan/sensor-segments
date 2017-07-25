@@ -32,6 +32,7 @@
       } else {
         localStorage.setItem('s3Credentials', JSON.stringify(s3Credentials));
         $('.login-container').addClass('hidden');
+        $('#logout-actions').removeClass('hidden');
       }
     });
   });
@@ -168,6 +169,11 @@
 
   $(document).on('focus', '#export-modal textarea', function(e) {
     $(this).select()
+  });
+
+  $(document).on('click', '#logout', function(e) {
+    localStorage.removeItem('s3Credentials');
+    document.location.reload();
   });
 
   function load(s3Credentials, callback) {
