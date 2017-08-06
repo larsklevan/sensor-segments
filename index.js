@@ -54,14 +54,13 @@
     $('.date-select').addClass('hidden').empty()
     var $cameraSelect = $('.camera-select').addClass('hidden').empty();;
     if (classroom.length) {
-      loadCameras(classroom, function(err, cameras) {
+      listFolders(classroom, function(err, paths) {
         if (err) {
           handleError(err);
         } else {
           $cameraSelect.removeClass('hidden').append($('<option></option>').text('Select a camera'));
-          cameras.forEach(function(path) {
-            var cameraLabel = path.replace(/\/$/, '').replace(/.*\//, '');
-            $cameraSelect.append($('<option></option>').val(path).text(cameraLabel));
+          paths.forEach(function(path) {
+            $cameraSelect.append($('<option></option>').val(path).text(pathToLabel(path)));
           });
         }
       })
@@ -248,20 +247,6 @@
         results.push(commonPrefix.Prefix.toString());
       });
       callback(null, results);
-    });
-  }
-
-  function loadCameras(classroom, callback) {
-    var cameras = [];
-    var params = {
-      Delimiter: '/',
-      Prefix: classroom
-    };
-    window.s3.listObjects(params, function(err, data) {
-      data.CommonPrefixes.forEach(function(commonPrefix) {
-        cameras.push(commonPrefix.Prefix.toString());
-      });
-      callback(null, cameras);
     });
   }
 
