@@ -206,6 +206,7 @@
   });
 
   $(document).on('click', '#logout', function(e) {
+    e.preventDefault();
     localStorage.removeItem('s3Credentials');
     document.location.reload();
   });
