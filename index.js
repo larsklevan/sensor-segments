@@ -51,26 +51,31 @@
 
   $(document).on('change', '.classroom-select', function(e) {
     var classroom = $(this).val();
-    $('.date-select').addClass('hidden').empty()
-    var $cameraSelect = $('.camera-select').addClass('hidden').empty();;
+    var $cameraSelect = $('.camera-select').trigger('reset');
     if (classroom.length) {
       listFolders(classroom, function(err, paths) {
         if (err) {
           handleError(err);
         } else {
-          $cameraSelect.removeClass('hidden').append($('<option></option>').text('Select a camera'));
-          paths.forEach(function(path) {
-            $cameraSelect.append($('<option></option>').val(path).text(pathToLabel(path)));
-          });
+          if (paths.length) {
+            $cameraSelect.removeClass('hidden').append($('<option></option>').text('Select a camera'));
+            paths.forEach(function(path) {
+              $cameraSelect.append($('<option></option>').val(path).text(pathToLabel(path)));
+            });
+          }
         }
       })
     }
   });
 
+  $(document).on('reset', '.camera-select', function() {
+    $(this).empty().addClass('hidden');
+    $('.date-select').trigger('reset');
+  })
+
   $(document).on('change', '.camera-select', function(e) {
     var camera = $(this).val();
-    $('.photo-container').addClass('hidden');
-    var $dateSelect = $('.date-select').addClass('hidden').empty();
+    var $dateSelect = $('.date-select').trigger('reset');
     if (camera.length) {
       listFolders(camera, function(err, paths) {
         if (err) {
@@ -83,6 +88,11 @@
         }
       })
     }
+  });
+
+  $(document).on('reset', '.date-select', function() {
+    $(this).empty().addClass('hidden');
+    $('.photo-container').trigger('reset');
   });
 
   $(document).on('change', '.date-select', function(e) {
@@ -120,6 +130,11 @@
       interval: false,
       wrap: false
     }).find('[data-toggle="tooltip"]').tooltip();
+  });
+
+  $(document).on('reset', '.photo-container', function() {
+    $(this).addClass('hidden');
+    $('.sensors-list tbody tr:not(:first-child)').remove();
   });
 
   // built-in keyboard option on carousel only works if the carousel has focus
