@@ -72,13 +72,13 @@
     $('.photo-container').addClass('hidden');
     var $dateSelect = $('.date-select').addClass('hidden').empty();
     if (camera.length) {
-      loadDates(camera, function(err, dates) {
+      listFolders(camera, function(err, paths) {
         if (err) {
           handleError(err);
         } else {
           $dateSelect.removeClass('hidden').append($('<option></option>').text('Select a date'));
-          dates.forEach(function(date) {
-            $dateSelect.append($('<option></option>').val(camera + date + '/').text(date));
+          paths.forEach(function(path) {
+            $dateSelect.append($('<option></option>').val(path).text(pathToLabel(path)));
           });
         }
       })
@@ -247,25 +247,6 @@
         results.push(commonPrefix.Prefix.toString());
       });
       callback(null, results);
-    });
-  }
-
-  function loadDates(camera, callback) {
-    var params = {
-      Delimiter: '/',
-      Prefix: camera
-    };
-    window.s3.listObjects(params, function(err, data) {
-      if (err) {
-        callback(err);
-      } else {
-        var dates = [];
-        data.CommonPrefixes.forEach(function(commonPrefix) {
-          var date = commonPrefix.Prefix.toString().replace(/\/$/, "").replace(/.*\//, "");
-          dates.push(date);
-        });
-        callback(null, dates);
-      }
     });
   }
 
