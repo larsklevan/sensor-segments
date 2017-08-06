@@ -79,7 +79,8 @@
       } else {
         $('.photo-container').toggleClass('hidden', photos.length === 0);
         photos.forEach(function(photo, i) {
-          var timestamp = new Date(photo.LastModified);
+          var key = photo.Key.replace(/.*still_/, '').replace(/\..*/, '');
+          var timestamp = new Date(Date.UTC.apply(Date.UTC, key.split('-')));
           var $carouselItem = $('<div class="item"></div>').data('timestamp', timestamp).appendTo($carouselInner);
           if (i === 0) {
             $carouselItem.addClass('active');
