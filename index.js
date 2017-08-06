@@ -196,20 +196,24 @@
     document.location.reload();
   });
 
+  function pathToLabel(path) {
+    return path.replace(/\/$/, '').replace(/.*\//, '');
+  }
+
   function load(s3Credentials, callback) {
     login(s3Credentials, function(err, s3) {
       if (err) {
         callback(err);
       } else {
         window.s3 = s3;
-        loadClassrooms(function(err, classrooms) {
+        listFolders(null, function(err, paths) {
           if (err) {
             callback(err);
           } else {
             var $classroomSelect = $('.classroom-select').removeClass('hidden').empty();
             $classroomSelect.append($('<option></option>').text('Select a classroom'));
-            classrooms.forEach(function(classroom) {
-              $classroomSelect.append($('<option></option>').val(classroom).text(classroom));
+            paths.forEach(function(path) {
+              $classroomSelect.append($('<option></option>').val(path).text(pathToLabel(path)));
             });
             callback(null);
           }
@@ -233,16 +237,17 @@
     });
   }
 
-  function loadClassrooms(callback) {
-    var classrooms = [];
+  function listFolders(prefix, callback) {
+    var results = [];
     var params = {
-      Delimiter: '/'
+      Delimiter: '/',
+      Prefix: prefix
     };
     window.s3.listObjects(params, function(err, data) {
       data.CommonPrefixes.forEach(function(commonPrefix) {
-        classrooms.push(commonPrefix.Prefix.toString().replace(/\//, ''));
+        results.push(commonPrefix.Prefix.toString());
       });
-      callback(null, classrooms);
+      callback(null, results);
     });
   }
 
@@ -250,7 +255,7 @@
     var cameras = [];
     var params = {
       Delimiter: '/',
-      Prefix: classroom + '/'
+      Prefix: classroom
     };
     window.s3.listObjects(params, function(err, data) {
       data.CommonPrefixes.forEach(function(commonPrefix) {
