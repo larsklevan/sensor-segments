@@ -49,6 +49,25 @@
     }
   });
 
+  $(document).on('change', '.classroom-select', function(e) {
+    var classroom = $(this).val();
+    $('.date-select').addClass('hidden').empty()
+    var $cameraSelect = $('.camera-select').addClass('hidden').empty();;
+    if (classroom.length) {
+      loadCameras(classroom, function(err, cameras) {
+        if (err) {
+          handleError(err);
+        } else {
+          $cameraSelect.removeClass('hidden').append($('<option></option>').text('Select a camera'));
+          cameras.forEach(function(path) {
+            var cameraLabel = path.replace(/\/$/, '').replace(/.*\//, '');
+            $cameraSelect.append($('<option></option>').val(path).text(cameraLabel));
+          });
+        }
+      })
+    }
+  });
+
   $(document).on('change', '.camera-select', function(e) {
     var camera = $(this).val();
     $('.photo-container').addClass('hidden');
@@ -60,7 +79,7 @@
         } else {
           $dateSelect.removeClass('hidden').append($('<option></option>').text('Select a date'));
           dates.forEach(function(date) {
-            $dateSelect.append($('<option></option>').val(camera + '/' + date + '/').text(date));
+            $dateSelect.append($('<option></option>').val(camera + date + '/').text(date));
           });
         }
       })
@@ -183,14 +202,14 @@
         callback(err);
       } else {
         window.s3 = s3;
-        loadCameras(function(err, cameras) {
+        loadClassrooms(function(err, classrooms) {
           if (err) {
             callback(err);
           } else {
-            var $cameraSelect = $('.camera-select').removeClass('hidden').empty();
-            $cameraSelect.append($('<option></option>').text('Select a camera'));
-            cameras.forEach(function(camera) {
-              $cameraSelect.append($('<option></option>').val(camera).text('Camera ' + camera));
+            var $classroomSelect = $('.classroom-select').removeClass('hidden').empty();
+            $classroomSelect.append($('<option></option>').text('Select a classroom'));
+            classrooms.forEach(function(classroom) {
+              $classroomSelect.append($('<option></option>').val(classroom).text(classroom));
             });
             callback(null);
           }
@@ -214,14 +233,28 @@
     });
   }
 
-  function loadCameras(callback) {
-    var cameras = [];
+  function loadClassrooms(callback) {
+    var classrooms = [];
     var params = {
       Delimiter: '/'
     };
     window.s3.listObjects(params, function(err, data) {
       data.CommonPrefixes.forEach(function(commonPrefix) {
-        cameras.push(commonPrefix.Prefix.toString().replace(/\//, ''));
+        classrooms.push(commonPrefix.Prefix.toString().replace(/\//, ''));
+      });
+      callback(null, classrooms);
+    });
+  }
+
+  function loadCameras(classroom, callback) {
+    var cameras = [];
+    var params = {
+      Delimiter: '/',
+      Prefix: classroom + '/'
+    };
+    window.s3.listObjects(params, function(err, data) {
+      data.CommonPrefixes.forEach(function(commonPrefix) {
+        cameras.push(commonPrefix.Prefix.toString());
       });
       callback(null, cameras);
     });
@@ -230,7 +263,7 @@
   function loadDates(camera, callback) {
     var params = {
       Delimiter: '/',
-      Prefix: camera + '/'
+      Prefix: camera
     };
     window.s3.listObjects(params, function(err, data) {
       if (err) {
