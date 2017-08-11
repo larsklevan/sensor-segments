@@ -125,6 +125,7 @@
           $('<h3></h3>').text(filename).appendTo($carouselCaption);
           $('<p></p>').text(timeOfDay(timestamp)).appendTo($carouselCaption);
         });
+        $photoViewer.trigger('loaded');
       }
     });
     $carousel.carousel({
@@ -150,6 +151,7 @@
     var $selectedCameraOption = $('.camera-select :selected');
     var $dateSelect = $('.date-select');
     var currentDate = $dateSelect.find(':selected').text();
+    var currentTimestamp = $('.carousel .item.active').data('timestamp');
     var $newCameraOption;
     if (e.keyCode === 38) {
       $newCameraOption = $selectedCameraOption.prev();
@@ -162,6 +164,20 @@
       if (sameDateVal) {
         $dateSelect.val(sameDateVal).change();
       }
+      $('.photo-viewer').one('loaded', function() {
+        var $carousel = $('.carousel');
+        $carousel.find('.item').each(function() {
+          var $item = $(this);
+          console.log({
+            currentTimestamp: currentTimestamp.getTime(),
+            timestamp: $item.data('timestamp').getTime()
+          })
+          if (currentTimestamp && $item.data('timestamp').getTime() < currentTimestamp.getTime()) {
+            console.log('next')
+            $carousel.carousel('next');
+          }
+        });
+      });
     })
   }
 
