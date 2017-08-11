@@ -85,6 +85,7 @@
           paths.forEach(function(path) {
             $dateSelect.append($('<option></option>').val(path).text(pathToLabel(path)));
           });
+          $dateSelect.trigger('loaded');
         }
       })
     }
@@ -145,10 +146,32 @@
     }
   }
 
+  function switchCameras(e) {
+    var $selectedCameraOption = $('.camera-select :selected');
+    var $dateSelect = $('.date-select');
+    var currentDate = $dateSelect.find(':selected').text();
+    var $newCameraOption;
+    if (e.keyCode === 38) {
+      $newCameraOption = $selectedCameraOption.prev();
+    } else {
+      $newCameraOption = $selectedCameraOption.next();
+    }
+    $newCameraOption.parent().val($newCameraOption.val()).change();
+    $dateSelect.one('loaded', function() {
+      var sameDateVal = $dateSelect.find('option:contains(' + currentDate + ')').val();
+      if (sameDateVal) {
+        $dateSelect.val(sameDateVal).change();
+      }
+    })
+  }
+
   // built-in keyboard option on carousel only works if the carousel has focus
   $(document).keydown(function(e) {
     if (e.keyCode === 37 || e.keyCode === 39) {
       advanceCarousel(e);
+    }
+    if (e.keyCode === 38 || e.keyCode === 40) {
+      switchCameras(e);
     }
   });
 
