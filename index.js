@@ -51,6 +51,7 @@
 
   $(document).on('change', '.classroom-select', function(e) {
     var classroom = $(this).val();
+    $('.sensors-list tbody tr:not(:first-child)').remove();
     var $cameraSelect = $('.camera-select').trigger('reset');
     if (classroom.length) {
       listFolders(classroom, function(err, paths) {
@@ -93,11 +94,11 @@
 
   $(document).on('reset', '.date-select', function() {
     $(this).empty().addClass('hidden');
-    $('.photo-container').trigger('reset');
+    $('.photo-viewer').trigger('reset');
   });
 
   $(document).on('change', '.date-select', function(e) {
-    var $photoViewer = $('.photo-viewer').empty();
+    var $photoViewer = $('.photo-viewer').trigger('reset');
     var $carousel = $('<div id="carousel" class="carousel"></div>').appendTo($photoViewer);
     var $carouselInner = $('<div class="carousel-inner"></div>').appendTo($carousel);
     $('<a class="left carousel-control" data-toggle="tooltip" data-placement="right" title="Keyboard Shortcut: Left Arrow" href="#carousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="right carousel-control" data-toggle="tooltip" data-placement="left" title="Keyboard Shortcut: Right Arrow" href="#carousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a>').appendTo($carousel);
@@ -106,7 +107,6 @@
       if (err) {
         handleErr(err);
       } else {
-        $('.photo-container').toggleClass('hidden', photos.length === 0);
         photos.forEach(function(photo, i) {
           var key = photo.Key.replace(/.*still_/, '').replace(/\..*/, '');
           var timestamp = new Date(Date.UTC.apply(Date.UTC, key.split('-')));
@@ -134,9 +134,8 @@
     }).find('[data-toggle="tooltip"]').tooltip();
   });
 
-  $(document).on('reset', '.photo-container', function() {
-    $(this).addClass('hidden');
-    $('.sensors-list tbody tr:not(:first-child)').remove();
+  $(document).on('reset', '.photo-viewer', function() {
+    $(this).empty();
   });
 
   function advanceCarousel(e) {
