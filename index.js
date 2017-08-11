@@ -158,6 +158,9 @@
     } else {
       $newCameraOption = $selectedCameraOption.next();
     }
+    if ($newCameraOption.val() === 'Select a camera') {
+      return;
+    }
     $newCameraOption.parent().val($newCameraOption.val()).change();
     $dateSelect.one('loaded', function() {
       var sameDateVal = $dateSelect.find('option:contains(' + currentDate + ')').val();
@@ -168,12 +171,7 @@
         var $carousel = $('.carousel');
         $carousel.find('.item').each(function() {
           var $item = $(this);
-          console.log({
-            currentTimestamp: currentTimestamp.getTime(),
-            timestamp: $item.data('timestamp').getTime()
-          })
           if (currentTimestamp && $item.data('timestamp').getTime() < currentTimestamp.getTime()) {
-            console.log('next')
             $carousel.carousel('next');
           }
         });
