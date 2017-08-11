@@ -137,15 +137,18 @@
     $('.sensors-list tbody tr:not(:first-child)').remove();
   });
 
+  function advanceCarousel(e) {
+    var count = e.shiftKey ? 10 : 1;
+    var direction = e.keyCode === 37 ? 'prev' : 'next';
+    for (var i = 0; i < count; i++) {
+      $("#carousel").carousel(direction);
+    }
+  }
+
   // built-in keyboard option on carousel only works if the carousel has focus
   $(document).keydown(function(e) {
-    if (e.keyCode === 37) {
-      // Previous
-      $("#carousel").carousel('prev');
-    }
-    if (e.keyCode === 39) {
-      // Next
-      $("#carousel").carousel('next');
+    if (e.keyCode === 37 || e.keyCode === 39) {
+      advanceCarousel(e);
     }
   });
 
